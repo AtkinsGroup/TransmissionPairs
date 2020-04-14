@@ -1,0 +1,9 @@
+name: alamos
+channels:
+  - defaults
+dependencies:
+  - beautifulsoup4
+  - lxml
+  - pandas
+  - requests
+
