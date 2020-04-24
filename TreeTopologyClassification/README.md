@@ -25,7 +25,7 @@ Reads a transmission pair tree or a set of trees and computes the topology class
 **Requirements:**
 
 - a data frame with tips and character states. The first column correspond to the tips labels and have to match the tip labels of the trees. The second column informs the states in the transmission pair, either 0 (source) or 1 (recipient). If there is an outgroup (one tip only) it should be listed in the first row (state=?).
-- (optional) a log file from a bayesian analyses using MrBayes that included Ancestral State Reconstruction. Column 19 have to correspond with the probability of the source being the ancestral state for the ingroup.
+- (optional) a log file from a bayesian analyses using MrBayes that included Ancestral State Reconstruction. Column 19 have to correspond with the probability of the source being the ancestral state for the ingroup. An identifier can be provided to be included in the log file.
 - R Dependencies: adephylo, ape, dplyr, phangorn, phytools, tibble 
 
 **Arguments:**
