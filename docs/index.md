@@ -1,6 +1,7 @@
-## *Information and Data for the 'Transmission Pairs' projects*<br/><br/>
+# Code and data for reproducing: 
+  Villabona-Arenas *et al.* Number of HIV-1 founder variants is determined by the recency of the source partner infection
 
-The functions are separated in two main categories:
+The functions are separated in three directories:
 
 1. Data Collation
 2. Tree Topology Classification
