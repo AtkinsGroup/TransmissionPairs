@@ -1,6 +1,5 @@
-# SGG modified from https://github.com/Bioconductor/bioconductor_docker/blob/master/Dockerfile
-
-FROM rocker/rstudio:3.6.2
+# Based on https://github.com/Bioconductor/bioconductor_docker/blob/master/Dockerfile
+FROM rocker/rstudio:3.6.3
 
 # nuke cache dirs before installing pkgs; tip from Dirk E fixes broken img
 RUN rm -f /var/lib/dpkg/available && rm -rf  /var/cache/apt/*
@@ -15,32 +14,21 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && \
 	apt-get -y --no-install-recommends install --fix-missing \
-	gdb \
 	libxml2-dev \
-	python-pip \
-	libz-dev \
-	liblzma-dev \
-	libbz2-dev \
-	libpng-dev \
-	libmariadb-dev \
-	libjpeg62-turbo-dev \
-	libudunits2-dev \
 	libmagick++-dev \
-	imagemagick \
+	libudunits2-dev \
+	libgdal-dev gdal-bin libgdal20 \
+	python-pip \
+	curl \
 	&& rm -rf /var/lib/apt/lists/*
 
-RUN echo "R_LIBS=/usr/local/lib/R/host-site-library:\${R_LIBS}" > /usr/local/lib/R/etc/Renviron.site \
-	&& echo "options(defaultPackages=c(getOption('defaultPackages'),'BiocManager'))" >> /usr/local/lib/R/etc/Rprofile.site
+RUN install2.r -s -e -r https://mran.microsoft.com/snapshot/2020-02-28 -r http://bioconductor.org/packages/3.10/bioc BH BiocManager DBI DescTools KernSmooth LearnBayes MASS Matrix R.methodsS3 R.oo R.utils R6 RColorBrewer RCurl RNeXML RSQLite Rcpp RcppArmadillo XML ade4 adegenet adephylo animation ape askpass assertthat backports bit bit64 bitops blob boot callr class classInt cli cluster clusterGeneration coda colorspace combinat crayon curl dbplyr deldir desc digest dplyr e1071 ellipse ellipsis evaluate expm fansi farver fastmap fastmatch formatR futile.logger futile.options gdata ggplot2 glue gmodels gtable gtools hms htmltools httpuv httr igraph isoband jsonlite labeling lambda.r later lattice lazyeval lifecycle magick magrittr maps matrixStats mcmcse memoise mgcv mime mnormt munsell mvtnorm nlme numDeriv openssl pegas permute phangorn phylobase phylotools phytools pillar pixmap pkgbuild pkgconfig pkgload plogr plotrix plyr praise prettyunits processx progress promises ps purrr quadprog rappdirs raster rentrez reshape2 rlang rncl rprojroot rstudioapi scales scatterplot3d segmented seqRFLP seqinr sf shiny snow sourcetools sp spData spdep stringi stringr sys testthat tibble tidyr tidyselect units utf8 uuid vctrs vegan viridisLite withr xml2 xtable
 
-ADD install.R /tmp/
+RUN R -e 'BiocManager::install(c("AnnotationDbi", "BSgenome", "Biobase", "BiocFileCache", "BiocGenerics", "BiocParallel", "BiocVersion", "Biostrings", "DelayedArray", "GenomeInfoDb", "GenomeInfoDbData", "GenomicAlignments", "GenomicFeatures", "GenomicRanges", "IRanges", "Rhtslib", "Rsamtools", "S4Vectors", "SummarizedExperiment", "VariantAnnotation", "XVector", "biomaRt", "genbankr", "rtracklayer", "zlibbioc"))'
 
-RUN R -f /tmp/install.R
+RUN python -m pip install pandas beautifulsoup4 requests lxml
 
-# DEVEL: Add sys env variables to DEVEL image
-RUN curl -O https://raw.githubusercontent.com/Bioconductor/BBS/master/3.11/Renviron.bioc \
-	&& cat Renviron.bioc | grep -o '^[^#]*' | sed 's/export //g' >>/etc/environment \
-	&& cat Renviron.bioc >> /root/.bashrc \
-	&& rm -rf Renviron.bioc
-
-# Init command for s6-overlay
-CMD ["/init"]
+RUN apt-get update && \
+	apt-get -y --no-install-recommends install --fix-missing \
+	mrbayes iqtree \
+	&& rm -rf /var/lib/apt/lists/*
