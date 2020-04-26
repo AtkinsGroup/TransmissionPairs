@@ -1,5 +1,19 @@
-# Code and data for reproducing: 
-  Villabona-Arenas *et al.* Number of HIV-1 founder variants is determined by the recency of the source partner infection
+
+## This repository supplies the code and data to generate the results in Villabona-Arenas *et al.* (2020) Number of HIV-1 founder variants is determined by the recency of the source partner infection
+
+## To use the code please cite the following:
+  - The DOI of the code version: XXX
+  - The original publication: XXX 
+  
+
+### Repository overview
+
+
+## Running information
+
+XXXXX
+
+## Directory organisation
 
 The functions are separated into three directories:
 
