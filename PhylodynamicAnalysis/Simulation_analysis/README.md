@@ -72,5 +72,5 @@ Calculates probability of one founder strain by combining information from the e
 
 **Usage example:**
 
-`pair.simulator(sims=sims, empirical=empirical)`
+`pair.founder.p(sims=sims, empirical=empirical)`
 
