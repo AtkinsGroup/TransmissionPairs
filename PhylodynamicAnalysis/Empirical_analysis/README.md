@@ -98,6 +98,7 @@ Process log and tree files.
 
 **Usage example:**
 
+`source('topology.class.R')`
 `pair.mb.summary(ids=ids, sets="set.csv")`<br/><br/>
 
 
