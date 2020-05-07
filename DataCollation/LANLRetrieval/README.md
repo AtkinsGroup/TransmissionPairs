@@ -22,7 +22,7 @@ Retrieve epidemiological tables from transmission clusters (by pairs) stored in 
 
 **Usage example:**
 
-`pair.epi.retrieval("query.csv", "myAPIkeyNumber")` 
+`pair.epi.retrieval(query="query.csv", key="myAPIkeyNumber")` 
 
 **Query file specs:**
 
