@@ -9,11 +9,12 @@ Our methods are structured in four stages: Data collation, Data pre-processing, 
 1. Data Collation
 2. Phylodynamic Analysis (data pre-processing, phylogenetic analysis and model calibration)
 3. Tree Topology Classification (inferring phylogenetic tree topology class)
-SH_ZM221 (example HIV-1 transmission pair)
 
-We also provide the data used to generate the analysis in:
 
-4. Data 
+We also provide all the data used to plot the figures, and some minimal example data for running the analysis from scratch:
+
+4. Data
+5. SH_ZM221 (an example HIV-1 transmission pair used in the worked example below)
 
 More detailed documentation is provided in the README files within the sub-directories. 
 
@@ -53,32 +54,42 @@ S4_Alignments.zip: aligned sequence data for the 112 transmission pairs used in 
 #request a key in https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/, query.txt example is specified 
 source("DataCollation/LANLRetrieval/pair.epi.retrieval.R")
 ids <- pair.epi.retrieval(query = "DataCollation/LANLRetrieval/example_query.csv", key = "myAPIkeyNumber")
+
 #write .fasta file with sequences of ‘ids’ to be used in the analysis as sets.csv
 source("DataCollation/GenBankRetrieval/pair.sequence.retrieval.R")
 pair.sequence.retrieval(ids=ids, min.overlap=70, max.length.diff=10, min.seqs=5)
+
 #update sets.csv to take only the sequences closest to the recipient infection time
 source("DataCollation/GenBankRetrieval/pair.sets.filter.R")
 pair.sets.filter(ids=ids, min.seqs=5)
+
 # align the sequence to be used in the analysis
 source("PhylodynamicAnalysis/Empirical_analysis/pair.alignment.R")
 pair.alignment(ids=ids, max.n=300, ref.gap.tolerance=99, gap.threshold=1, sets="set.csv")
+
 # read in the source files for the topology analysis
 source("TreeTopologyClassification/topology.class.R")
+
 # generate mrbayes.nex for MrBayes
 source("PhylodynamicAnalysis/Empirical_analysis/pair.mb.setting.R")
 pair.mb.setting(ids=ids, ngen=10000000, samplefreq=1000, printfreq=100000, diagnfreq=1000000, burninfrac=0.5, sets="set.csv")
 
-# Now run MrBayes on the command line: ```mb SH_ZM221/SH_ZM221.6639.7478/mrbayes.nex``` or via R using:
+# Now run MrBayes via R using:
 system("mb SH_ZM221/SH_ZM221.6639.7478/mrbayes.nex")
-# Generate phylogenetic findings for empirical tree and overwrite set.csv with results
-#example results are attached as .zip
-#unzip MrBayes results via R using:
+
+
+# Note that example results are attached as a .zip 
+# Unzip MrBayes results via R
 unzip("SH_ZM221/SH_ZM221.6639.7478/SH_ZM221.6639.7478.zip", exdir = "SH_ZM221/SH_ZM221.6639.7478/")
+
+# Generate phylogenetic findings for empirical tree and overwrite set.csv with results
 source("PhylodynamicAnalysis/Empirical_analysis/pair.mb.summary.R")
 pair.mb.summary(ids=ids, sets="set.csv")
-# Simulates trees and summarises results for a specific epidemiological timeline("PhylodynamicAnalysis/Simulation_analysis/pair.simulator.R")
+
+# Simulates trees and summarises results for a specific epidemiological timeline
 pair.simulator(pair.id="mypair", vts="/VirusTreeSimulator.jar", simulation=1, transmission=30, sampling.source=30, sampling.rec=30, index=1095, n.source=5, n.rec=5, vt.source=1, vt.rec=1, tau=1.8, Ne0=1, K=300, t50=-2, evo.r=0.01148, gene.ref=c(6758, 7757), subs.model="GTR", subs.param=c(0.48,4,0.18,0.41,0.17,0.20,0.22,3.01,5.59,1.21,1.39,8.25,1.0)S, acute=c(13:90), recent=c(91:180), chronic=c(181:7300))
-# calibrates the simulations to the empirical data (and saves the best model to a file. Uses results from all the pairs, example files are provided
+
+# Calibrate the simulations to the empirical data (and save the best model to a file. Uses results from all the pairs, example simulation files are provided
 source("PhylodynamicAnalysis/Simulation_analysis/pair.founder.p.R")
 unzip("PhylodynamicAnalysis/Simulation_analysis/example_simulations.csv.zip", exdir="PhylodynamicAnalysis/Simulation_analysis/")
 pair.founder.p(simulations="PhylodynamicAnalysis/Simulation_analysis/example_simulations.csv", empirical="PhylodynamicAnalysis/Empirical_analysis/example_empirical.csv")```
