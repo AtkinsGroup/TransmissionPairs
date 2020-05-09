@@ -66,11 +66,11 @@ Calculates probability of one founder strain by combining information from the e
 
 **Arguments:**
 
-- sims: combined output of multiple simulated pairs using *pair.simulator* function.
+- simulations: combined output of multiple simulated pairs using *pair.simulator* function.
 - empirical: combined output of multiple empirical pairs using *pair.mb.summary* function (e.g. merged set.csv files).
 
 
 **Usage example:**
 
-`pair.founder.p(sims=sims, empirical=empirical)`
+`pair.founder.p(sims=simulations, empirical=empirical)`
 

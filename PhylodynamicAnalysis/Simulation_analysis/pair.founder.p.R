@@ -1,4 +1,4 @@
-pair.founder.p.R <- function(sims, empirical) {
+pair.founder.p.R <- function(simulations, empirical) {
     ####################################
     #load libraries and additional functions
     ####################################
@@ -15,8 +15,9 @@ pair.founder.p.R <- function(sims, empirical) {
     ####################################
     #set values for function arguments
     ####################################
-    mysims <- read.csv(sims, stringsAsFactors = FALSE)
-    empirical <- read.csv(empirical, stringsAsFactors = FALSE)
+    mysims <- read.csv(file = simulations, stringsAsFactors = FALSE)
+    empirical <- read.csv(file = empirical, stringsAsFactors = FALSE)
+    empirical<-empirical[,c("cluster_name","MM.p", "PM.p", "PP.p","topology")]
     ####################################
     #pre-processing
     ####################################
@@ -31,7 +32,7 @@ pair.founder.p.R <- function(sims, empirical) {
     ####################################
     #calculations of topology class probabilities
     ####################################
-    for (loopedVt in unique(mysims$vt.rec)) {
+    for (loopedVt in sort(unique(mysims$vt.rec))) {
         df.a <-
             mysims %>% filter(vt.rec %in% c(loopedVt) &
                                   transmission.char == 'acute')
@@ -301,7 +302,7 @@ pair.founder.p.R <- function(sims, empirical) {
                     as.numeric(as.character(unlist(df.p.12[which(df.p.12$pair == i), c('MM', 'PM', 'PP')])))
             )
         mydata <-
-            round(as.numeric(as.character(unlist(df.p.1[which(df.p.1$pair == i), c('MM.p', 'PM.p', 'PP.p')]))))
+            round(as.numeric(as.character(unlist(empirical[which(empirical$pair == i), c('MM.p', 'PM.p', 'PP.p')]))))
         raw.simulations <- simulations
         for (j in 1:ncol(simulations)) {
             if (sum(simulations[, j]) != 0)
