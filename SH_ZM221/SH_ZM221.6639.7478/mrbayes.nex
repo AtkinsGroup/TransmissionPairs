@@ -1,0 +1,17 @@
+begin mrbayes;
+set autoclose=yes nowarn=yes;
+execute SH_ZM221/SH_ZM221.6639.7478/SH_ZM221.6639.7478.mb.nex;
+outgroup 1;
+charset DNA = 1-927;
+charset Transmission = 928;
+partition ancstates = 2: DNA, Transmission;
+set partition = ancstates;
+lset applyto=(1) nst=6 rates=invgamma;
+unlink statefreq = (all) revmat = (all) pinvar = (all) shape = (all);
+prset ratepr=variable;
+constraint ingroup = 2 - 60;
+prset topologypr = constraints(ingroup);
+report applyto=(2) ancstates=yes;
+mcmc nchains=2 ngen=10000000 samplefreq=1000 printfreq=100000 diagnfreq=1000000 burninfrac=0.5;
+sump;
+end;

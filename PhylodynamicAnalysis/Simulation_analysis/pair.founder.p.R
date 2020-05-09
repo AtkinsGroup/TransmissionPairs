@@ -1,4 +1,4 @@
-pair.founder.p.R <- function(simulations, empirical) {
+pair.founder.p <- function(simulations, empirical) {
     ####################################
     #load libraries and additional functions
     ####################################

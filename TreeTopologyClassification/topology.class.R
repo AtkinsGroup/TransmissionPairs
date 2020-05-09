@@ -61,7 +61,7 @@ topology.class <-
         for (i in 1:length(tr)) {
             if (outgroup) {
                 troot <- reroot(tr[[i]], 1)
-                troot <- drop.tip(troot, 1) s
+                troot <- drop.tip(troot, 1) 
             } else
                 troot <- tr[[i]]
             if (i %in% c(1, seq(length(tr) * 0.1, length(tr), length(tr) * 0.1)))

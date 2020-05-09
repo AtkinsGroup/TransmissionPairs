@@ -117,13 +117,7 @@ pair.epi.retrieval <- function(query, key) {
         if (nchar(id) > 20)
             cluster.name <-
             paste("id", cluster, gsub("^.*?\\.", ".", cluster.name), sep = "")
-        write.table(
-            ids,
-            'ids.txt',
-            quote = F,
-            row.names = F,
-            col.names = F
-        )
+        ids<- c(ids, cluster.name)
         system(paste("mkdir ", cluster.name, sep = ""))
         write.csv(
             info,

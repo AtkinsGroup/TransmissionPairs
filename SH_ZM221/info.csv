@@ -1,0 +1,3 @@
+"PatientId","PatientCode","PatientSex","RiskFactor","InfectionCountry","InfectionCity","InfectionYear","HLAtype","Patientethnicity","Project","Progression","Patientcomment","#ofpatientseqs","#ofpatienttimepoints","Species","ClusterName","States","ClusterId"
+"31107","221F","F","Heterosexual","","","","","","ZEHRP","","Virus donor to ZM221M.","75","","","SH_ZM221","source",757
+"31093","221M","M","Heterosexual","","","2003","","","ZEHRP","","Virus recipient from ZM221F.","92","3","","SH_ZM221","recipient",757
