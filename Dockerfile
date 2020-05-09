@@ -27,10 +27,10 @@ RUN apt-get update && \
 
 RUN python3 -m pip install setuptools wheel pandas numpy beautifulsoup4 requests lxml
 
-COPY DataCollation/LANLRetrieval /transmissionpairs/DataCollation/LANLRetrieval
+COPY . /transmissionpairs
 
+# Install alamos-extract for load_hiv
 WORKDIR /transmissionpairs/DataCollation/LANLRetrieval/alamos-extract
+RUN python3 setup.py develop
 
-# RUN python3 setup.py develop
-
-# WORKDIR /transmissionpairs
+WORKDIR /transmissionpairs
