@@ -18,17 +18,19 @@ RUN apt-get update && \
 	libmagick++-dev \
 	libudunits2-dev \
 	libgdal-dev gdal-bin libgdal20 \
-	python-pip \
-	curl \
-	&& rm -rf /var/lib/apt/lists/*
-
-RUN install2.r -s -e -r https://mran.microsoft.com/snapshot/2020-02-28 -r http://bioconductor.org/packages/3.10/bioc BH BiocManager DBI DescTools KernSmooth LearnBayes MASS Matrix R.methodsS3 R.oo R.utils R6 RColorBrewer RCurl RNeXML RSQLite Rcpp RcppArmadillo XML ade4 adegenet adephylo animation ape askpass assertthat backports bit bit64 bitops blob boot callr class classInt cli cluster clusterGeneration coda colorspace combinat crayon curl dbplyr deldir desc digest dplyr e1071 ellipse ellipsis evaluate expm fansi farver fastmap fastmatch formatR futile.logger futile.options gdata ggplot2 glue gmodels gtable gtools hms htmltools httpuv httr igraph isoband jsonlite labeling lambda.r later lattice lazyeval lifecycle magick magrittr maps matrixStats mcmcse memoise mgcv mime mnormt munsell mvtnorm nlme numDeriv openssl pegas permute phangorn phylobase phylotools phytools pillar pixmap pkgbuild pkgconfig pkgload plogr plotrix plyr praise prettyunits processx progress promises ps purrr quadprog rappdirs raster rentrez reshape2 rlang rncl rprojroot rstudioapi scales scatterplot3d segmented seqRFLP seqinr sf shiny snow sourcetools sp spData spdep stringi stringr sys testthat tibble tidyr tidyselect units utf8 uuid vctrs vegan viridisLite withr xml2 xtable
-
-RUN R -e 'BiocManager::install(c("AnnotationDbi", "BSgenome", "Biobase", "BiocFileCache", "BiocGenerics", "BiocParallel", "BiocVersion", "Biostrings", "DelayedArray", "GenomeInfoDb", "GenomeInfoDbData", "GenomicAlignments", "GenomicFeatures", "GenomicRanges", "IRanges", "Rhtslib", "Rsamtools", "S4Vectors", "SummarizedExperiment", "VariantAnnotation", "XVector", "biomaRt", "genbankr", "rtracklayer", "zlibbioc"))'
-
-RUN python -m pip install pandas beautifulsoup4 requests lxml
-
-RUN apt-get update && \
-	apt-get -y --no-install-recommends install --fix-missing \
 	mrbayes iqtree \
-	&& rm -rf /var/lib/apt/lists/*
+	python3-pip \
+	curl \
+	&& rm -rf /var/lib/apt/lists/* \
+	&& install2.r -s -e -r https://mran.microsoft.com/snapshot/2020-02-28 -r http://bioconductor.org/packages/3.10/bioc BH BiocManager DBI DescTools KernSmooth LearnBayes MASS Matrix R.methodsS3 R.oo R.utils R6 RColorBrewer RCurl RNeXML RSQLite Rcpp RcppArmadillo XML ade4 adegenet adephylo animation ape askpass assertthat backports bit bit64 bitops blob boot callr class classInt cli cluster clusterGeneration coda colorspace combinat crayon curl dbplyr deldir desc digest dplyr e1071 ellipse ellipsis evaluate expm fansi farver fastmap fastmatch formatR futile.logger futile.options gdata ggplot2 glue gmodels gtable gtools hms htmltools httpuv httr igraph isoband jsonlite labeling lambda.r later lattice lazyeval lifecycle magick magrittr maps matrixStats mcmcse memoise mgcv mime mnormt munsell mvtnorm nlme numDeriv openssl pegas permute phangorn phylobase phylotools phytools pillar pixmap pkgbuild pkgconfig pkgload plogr plotrix plyr praise prettyunits processx progress promises ps purrr quadprog rappdirs raster rentrez reshape2 rlang rncl rprojroot rstudioapi scales scatterplot3d segmented seqRFLP seqinr sf shiny snow sourcetools sp spData spdep stringi stringr sys testthat tibble tidyr tidyselect units utf8 uuid vctrs vegan viridisLite withr xml2 xtable \
+	&& R -e 'BiocManager::install(c("AnnotationDbi", "BSgenome", "Biobase", "BiocFileCache", "BiocGenerics", "BiocParallel", "BiocVersion", "Biostrings", "DelayedArray", "GenomeInfoDb", "GenomeInfoDbData", "GenomicAlignments", "GenomicFeatures", "GenomicRanges", "IRanges", "Rhtslib", "Rsamtools", "S4Vectors", "SummarizedExperiment", "VariantAnnotation", "XVector", "biomaRt", "genbankr", "rtracklayer", "zlibbioc"))'
+
+RUN python3 -m pip install setuptools wheel pandas numpy beautifulsoup4 requests lxml
+
+COPY DataCollation/LANLRetrieval /transmissionpairs/DataCollation/LANLRetrieval
+
+WORKDIR /transmissionpairs/DataCollation/LANLRetrieval/alamos-extract
+
+# RUN python3 setup.py develop
+
+# WORKDIR /transmissionpairs
