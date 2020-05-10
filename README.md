@@ -1,7 +1,7 @@
  
 ## Please remember to cite the following:
-- The original publication: Villabona-Arenas CJ, Hall M, Lythgoe KA, Gaffney SG, Regoes RR, Hué S, Atkins KE (2020) Number of HIV-1 founder variants is determined by the recency of the source partner infection Science
-- And,if citing the code or data specifically, the DOI as specified in the Science publication
+- The original publication: Villabona-Arenas CJ, Hall M, Lythgoe KA, Gaffney SG, Regoes RR, Hué S, Atkins KE (2020) "**Number of HIV-1 founder variants is determined by the recency of the source partner infection**", *Science*
+- And, if citing the code or data specifically, the DOI as specified in the Science publication
 - Please refer to CITATION file for up-to-date references
 
 ## Repository overview and organisation
@@ -18,39 +18,63 @@ We also provide all the data used to plot the figures, and some minimal example 
 
 More detailed documentation is provided in the README files within the sub-directories. 
 
+
 ### 1. Data Collation.
 First we retrieve epidemiological data from LANL HIV and GenBank databases, as well as genetic sequences from the latter, using HIV transmission cluster / partner IDs. For this, we provide two R functions that can be called:
-```pair.epi.retrieval``` which uses the python script ```alamos-extract``` that retrieves the metadata from HIV transmission pairs that are indexed in Los Alamos Database. 
- 
- 
-```pair.sequence.retrieval``` which retrieves the genetic sequences indexed in the Los Alamos Database from GenBank and creates subdirectories for each pair.
+`pair.epi.retrieval` which uses the python script `alamos-extract` that retrieves the metadata from HIV transmission pairs that are indexed in Los Alamos Database. 
+
+`pair.sequence.retrieval` which retrieves the genetic sequences indexed in the Los Alamos Database from GenBank and creates subdirectories for each pair.
+
  
 ### 2. Phylodynamic Analysis.
 *Empirical analysis* consists of (a) aligning the sequence data collated, (b) writing the  MrBayes running files that will generate the phylogenetic trees of the empirical data and (c) summarizing MrBayes outputs.
-The function ```pair.sets.filter ``` selects the sequences to be used in the analysis. The function ```pair.alignment``` then aligns the sequence data.
-```pair.mb.setting``` generates a .nex file to run MrBayes using the sequence data.
-```pair.mb.summary``` generates a summary file of the phylogenetic analysis completed in MrBayes. 
+The function `pair.sets.filter ` selects the sequences to be used in the analysis. The function `pair.alignment` then aligns the sequence data.
+`pair.mb.setting` generates a .nex file to run MrBayes using the sequence data.
+`pair.mb.summary` generates a summary file of the phylogenetic analysis completed in MrBayes. 
  
 *Simulation analysis* consists of (a) simulating phylogenetic trees for a transmission pair using the epidemiological timelines for that pair for a range of transmission models, (b) computing the likelihood associated with each transmission model by combining both the empirical and simulation outcomes for a transmission pair (Model calibration), (c) calculating the probability of one founder strain for each transmission pair’s maximum likelihood model, and (d) calculating the relative risk that one founder strain initiates infection in acute pair transmissions than in chronic pair transmissions (across all pairs)
  
 pair.simulator generates the transmission timelines for a transmission pair based on their epidemiological data, simulates sequences using VirusTreeSimulator (xxxx) and for each simulation, calculates a maximum likelihood tree for the pair; using these ML trees, we then calculate the number of topology classifications (i.e. PP, PM, MM) for each pair across all the simulations.  
  
-```pair.founder.p.R``` uses maximum likelihood to calculate the best fit model for each transmission pair and then, for this model, calculates the probability that one variant was transmitted using this model. Finally, we calculate the relative risk of acute transmissions vs. chronic transmissions initiating infections with one founder strain across pairs.
+`pair.founder.p.R` uses maximum likelihood to calculate the best fit model for each transmission pair and then, for this model, calculates the probability that one variant was transmitted using this model. Finally, we calculate the relative risk of acute transmissions vs. chronic transmissions initiating infections with one founder strain across pairs.
  
  
 ### 3. Tree Topology Classification.
-```topology.class``` automatically determines the tree topology class (i.e. MM, PM or PP) and is called during the Phylodynamic analysis. 
- 
+`topology.class` automatically determines the tree topology class (i.e. MM, PM or PP) and is called during the Phylodynamic analysis. 
+
+
 ### 4. Data.
 This directory contains:
 S1_SITable_EpiGeneticData.csv: output from the Data Collation step (both automated and manual retrieval) detailing the 112 transmission pairs used in the analysis (their epidemiological data and all metadata, publication details and ethics information)
 S2_SITable_AnalysisData.csv: output from the Tree Topology Classification and Phylodynamics analysis steps detailing the results used to generate the publication figures
 S3_SITable_ColumnNamesKey.csv: The column headings for data tables S1 and S2 together with the publication figures numbers where these columns are plotted
 S4_Alignments.zip: aligned sequence data for the 112 transmission pairs used in the analysis as .fasta files with files names as the "LANLdb_cluster_name" listed in .csv files
- 
+
+
+## Installation
+
+There are two options for installation.
+
+1. **Manual installation**: The included R scripts use CRAN and Bioconductor packages listed in `renv.lock`, that can be installed using the `renv` package. Additional tools required are:
+- `mrbayes`: https://nbisweden.github.io/MrBayes/index.html
+- `VirusTreeSimulator`: https://github.com/PangeaHIV/VirusTreeSimulator
+- `Seq-Gen`: https://github.com/rambaut/Seq-Gen/releases/tag/1.3.4
+- `IQ-TREE`: http://www.iqtree.org/
+
+2. **Docker**: All code, data, dependencies, and RStudio are included in a Docker image available on Docker Hub (https://hub.docker.com/r/atkinsgroup/transmissionpairs). With Docker [installed](https://docs.docker.com/get-docker/), you can launch RStudio in the TransmissionPairs container with a single line:
+```
+docker run -it -e PASSWORD=YOURPASSWORD -p 8787:8787 atkinsgroup/transmissionpairs
+```
+- Modify the above line to specify a password, changing 'YOURPASSWORD' to a new value.
+- RStudio will be available in your browser at `localhost:8787`, with username `rstudio` and password as above.
+- Repository code is in the `/transmissionpairs` directory.
+
+
+
 ## Running the analysis: example code
  
-```setwd(<filepath to TransmissionPairs>)
+```
+setwd(<filepath to TransmissionPairs>)
 #request a key in https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/, query.txt example is specified 
 source("DataCollation/LANLRetrieval/pair.epi.retrieval.R")
 ids <- pair.epi.retrieval(query = "DataCollation/LANLRetrieval/example_query.csv", key = "myAPIkeyNumber")
