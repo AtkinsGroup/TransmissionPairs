@@ -1,4 +1,14 @@
- 
+# HIV Transmission Pairs
+
+This is the code and data repository for the HIV Transmission Pairs project.
+
+This README includes:
+- How to cite the code and paper
+- An overview of repository structure
+- Installation instructions
+- Example code for running analysis
+
+
 ## Please remember to cite the following:
 - The original publication: Villabona-Arenas CJ, Hall M, Lythgoe KA, Gaffney SG, Regoes RR, Hué S, Atkins KE (2020) "**Number of HIV-1 founder variants is determined by the recency of the source partner infection**", *Science*
 - And, if citing the code or data specifically, the DOI as specified in the Science publication
@@ -62,18 +72,28 @@ There are two options for installation.
 - `IQ-TREE`: http://www.iqtree.org/
 
 2. **Docker**: All code, data, dependencies, and RStudio are included in a Docker image available on Docker Hub (https://hub.docker.com/r/atkinsgroup/transmissionpairs). With Docker [installed](https://docs.docker.com/get-docker/), you can launch RStudio in the TransmissionPairs container with a single line:
-```
+```bash
 docker run -it -e PASSWORD=YOURPASSWORD -p 8787:8787 atkinsgroup/transmissionpairs
 ```
 - Modify the above line to specify a password, changing 'YOURPASSWORD' to a new value.
 - RStudio will be available in your browser at `localhost:8787`, with username `rstudio` and password as above.
 - Repository code is in the `/transmissionpairs` directory.
-
+- To make directories on your host machine available to the container, e.g. to save output, use the `-v` argument to bind a directory, e.g. `-v /some/local/path:/transmissionpairs/out`
+- To build and run the container using `Singularity` instead of Docker, run the following:
+```bash
+# Build the Singularity image (you only need to do this once)
+singularity build transmissionpairs.sif docker://atkinsgroup/transmissionpairs
+# Launch the container
+PASSWORD=YOURPASSWORD singularity exec transmissionpairs.sif rserver --auth-none=0  --auth-pam-helper-path=pam-helper
+```
+  - as with the Docker installation, modify the command with suitable password.
+  - RStudio will be available on port 8787 with your username and the chosen password.
+  - For more information on setup, refer to the Rocker instructions for Singularity, as the container is built on a Rocker container: https://www.rocker-project.org/use/singularity/
 
 
 ## Running the analysis: example code
  
-```
+```R
 setwd(<filepath to TransmissionPairs>)
 #request a key in https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/, query.txt example is specified 
 source("DataCollation/LANLRetrieval/pair.epi.retrieval.R")
@@ -116,6 +136,5 @@ pair.simulator(pair.id="mypair", vts="/VirusTreeSimulator.jar", simulation=1, tr
 # Calibrate the simulations to the empirical data (and save the best model to a file. Uses results from all the pairs, example simulation files are provided
 source("PhylodynamicAnalysis/Simulation_analysis/pair.founder.p.R")
 unzip("PhylodynamicAnalysis/Simulation_analysis/example_simulations.csv.zip", exdir="PhylodynamicAnalysis/Simulation_analysis/")
-pair.founder.p(simulations="PhylodynamicAnalysis/Simulation_analysis/example_simulations.csv", empirical="PhylodynamicAnalysis/Empirical_analysis/example_empirical.csv")```
- 
-
+pair.founder.p(simulations="PhylodynamicAnalysis/Simulation_analysis/example_simulations.csv", empirical="PhylodynamicAnalysis/Empirical_analysis/example_empirical.csv")
+```
