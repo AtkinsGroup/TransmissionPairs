@@ -46,7 +46,7 @@ The function `pair.sets.filter ` selects the sequences to be used in the analysi
  
 pair.simulator generates the transmission timelines for a transmission pair based on their epidemiological data, simulates sequences using VirusTreeSimulator (xxxx) and for each simulation, calculates a maximum likelihood tree for the pair; using these ML trees, we then calculate the number of topology classifications (i.e. PP, PM, MM) for each pair across all the simulations.  
  
-`pair.founder.p.R` uses maximum likelihood to calculate the best fit model for each transmission pair and then, for this model, calculates the probability that one variant was transmitted using this model. Finally, we calculate the relative risk of acute transmissions vs. chronic transmissions initiating infections with one founder strain across pairs.
+`pair.founder.p.R` uses maximum likelihood to calculate the best fit model for each transmission pair and then, for this model, calculates the probability that one variant was transmitted. Finally, we calculate the relative risk of acute transmissions vs. chronic transmissions initiating infections with one founder strain across pairs.
  
  
 ### 3. Tree Topology Classification.
