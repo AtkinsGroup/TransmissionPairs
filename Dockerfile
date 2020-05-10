@@ -35,10 +35,11 @@ RUN apt-get update && \
 	&& mkdir -p /VirusTreeSimulator-master/out/artifacts/VirusTreeSimulator_jar/ \
 	&& curl -LO https://github.com/PangeaHIV/VirusTreeSimulator/raw/master/out/artifacts/VirusTreeSimulator_jar/VirusTreeSimulator.jar
 
-COPY . /home/rstudio/
 
-# Install alamos-extract for load_hiv
-WORKDIR /home/rstudio/DataCollation/LANLRetrieval/alamos-extract
-RUN python3 setup.py develop
+COPY . /transmissionpairs
 
-WORKDIR /home/rstudio
+# Install alamos-extract for load_hiv, add symbolic link for RStudio
+WORKDIR /transmissionpairs/DataCollation/LANLRetrieval/alamos-extract
+RUN python3 setup.py develop && ln -s /transmissionpairs /home/rstudio/transmissionpairs
+
+WORKDIR /transmissionpairs
