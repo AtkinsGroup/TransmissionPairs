@@ -1,5 +1,7 @@
 # HIV Transmission Pairs
 
+[![DOI](https://zenodo.org/badge/224859135.svg)](https://zenodo.org/badge/latestdoi/224859135)
+
 This is the code and data repository for the HIV Transmission Pairs project.
 
 This README includes:
